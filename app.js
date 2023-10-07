@@ -1,24 +1,11 @@
-// Welcome to
-// __________         __    __  .__                               __
-// \______   \_____ _/  |__/  |_|  |   ____   ______ ____ _____  |  | __ ____
-//  |    |  _/\__  \\   __\   __\  | _/ __ \ /  ___//    \\__  \ |  |/ // __ \
-//  |    |   \ / __ \|  |  |  | |  |_\  ___/ \___ \|   |  \/ __ \|    <\  ___/
-//  |________/(______/__|  |__| |____/\_____>______>___|__(______/__|__\\_____>
-//
-// This file can be a nice home for your Battlesnake logic and helper functions.
-//
-// To get you started we've included code to prevent your Battlesnake from moving backwards.
-// For more info see docs.battlesnake.com
-
-import runServer from './server';
-import { GameState, InfoResponse, MoveResponse, Move, Battlesnake, Board, Coord } from './types';
-import { getOccupiedFields } from './getOccupiedFields'
-import { getSafeMoves } from './getSafeMoves'
+import runServer from './server.js';
+import { getOccupiedFields } from './getOccupiedFields.js'
+import { getSafeMoves } from './getSafeMoves.js'
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
 // TIP: If you open your Battlesnake URL in a browser you should see this data
-function info(): InfoResponse {
+function info() {
   console.log("INFO");
 
   return {
@@ -31,12 +18,12 @@ function info(): InfoResponse {
 }
 
 // start is called when your Battlesnake begins a game
-function start(gameState: GameState): void {
+function start(gameState) {
   console.log("GAME START");
 }
 
 // end is called when your Battlesnake finishes a game
-function end(gameState: GameState): void {
+function end(gameState) {
   if (gameState.board.snakes.some(s => s.id === gameState.you.id)) {
     console.log("YOU WIN\n");
   } else {
@@ -47,7 +34,7 @@ function end(gameState: GameState): void {
 // move is called on every turn and returns your next move
 // Valid moves are "up", "down", "left", or "right"
 // See https://docs.battlesnake.com/api/example-move for available data
-function move(gameState: GameState): MoveResponse {
+function move(gameState) {
   console.log(gameState.turn);
 
   const occupiedFields = getOccupiedFields(gameState);
@@ -89,21 +76,21 @@ function move(gameState: GameState): MoveResponse {
   return { move: getRandomMove(safeMoves) };
 }
 
-function getPreferredMove(safeMoves: Move[], preferredMoves: Move[]): Move {
+function getPreferredMove(safeMoves, preferredMoves) {
     const preferredSafeMoves = safeMoves.filter(m => preferredMoves.includes(m));
     const preferredMove = preferredSafeMoves.length === 0 ? getRandomMove(safeMoves) : getRandomMove(preferredSafeMoves);
     return preferredMove;
 }
 
-function getRandomMove(moves: Move[]): Move {
+function getRandomMove(moves) {
   return moves[Math.floor(Math.random()*moves.length)];
 }
 
 // We'll prefer moving towards the middle if we're in the outer two lanes in any direction
 // We'll also prefer not to move into the outer two lanes in general.
-function getPreferredMoves(you: Battlesnake, board: Board): Move[] {
+function getPreferredMoves(you, board) {
   const head = you.body[0];
-  const moves: Move[] = [];
+  const moves = [];
   if(head.x > 2) moves.push('left');
   if(head.x < board.width - 3) moves.push('right');
   if(head.y > 2) moves.push('down');
@@ -113,7 +100,7 @@ function getPreferredMoves(you: Battlesnake, board: Board): Move[] {
 
 // Determine whether we want to seek food
 // The idea here is that it's better to stay small because this increase the number of safe moves over time
-function shouldSeekFood(you: Battlesnake, snakes: Battlesnake[]): boolean {
+function shouldSeekFood(you, snakes) {
   // We should consider the ruleset settings here too.
   // gameState.game.ruleset.settings.foodSpawnChance
   // gameState.game.ruleset.settings.minimumFood
@@ -124,8 +111,8 @@ function shouldSeekFood(you: Battlesnake, snakes: Battlesnake[]): boolean {
   return false;
 }
 
-function getDirections(from: Coord, to: Coord): Move[] {
-  const moves: Move[] = [];
+function getDirections(from, to) {
+  const moves = [];
   if (from.y < to.y) moves.push('up');
   if (from.y > to.y) moves.push('down');
   if (from.x < to.x) moves.push('right');
@@ -135,7 +122,7 @@ function getDirections(from: Coord, to: Coord): Move[] {
 
 // Get the coord of the closest relevant food.
 // This is the closest food where no other snakes at closer than us.
-function getClosestRelevantFoodCoord(you: Battlesnake, snakes: Battlesnake[], foodCoords: Coord[]): Coord | null {
+function getClosestRelevantFoodCoord(you, snakes, foodCoords) {
   const head = you.body[0];
   const foodByDistance = foodCoords.map(f => {
     const distance = measureDistance(f, head)
@@ -155,7 +142,7 @@ function getClosestRelevantFoodCoord(you: Battlesnake, snakes: Battlesnake[], fo
   return null;
 }
 
-function measureDistance(a: Coord, b: Coord): number {
+function measureDistance(a, b) {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 }
 

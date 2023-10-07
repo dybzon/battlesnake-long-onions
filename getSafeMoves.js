@@ -1,7 +1,5 @@
-import { Move, Battlesnake, Board, Coord } from './types';
-
-export function getSafeMoves(you: Battlesnake, occupiedFields: Coord[], board: Board) {
-  const moves: Move[] = [];
+export function getSafeMoves(you, occupiedFields, board) {
+  const moves = [];
   if (canMoveUp(you, occupiedFields, board)) moves.push('up');
   if (canMoveRight(you, occupiedFields, board)) moves.push('right');
   if (canMoveDown(you, occupiedFields, board)) moves.push('down');
@@ -9,35 +7,35 @@ export function getSafeMoves(you: Battlesnake, occupiedFields: Coord[], board: B
   return moves;
 }
 
-function canMoveUp(you: Battlesnake, occupiedFields: Coord[], board: Board) {
+function canMoveUp(you, occupiedFields, board) {
   const head = you.body[0];
   const coord = { ...head };
   coord.y++;
   return isCoordSafe(coord, occupiedFields, board);
 }
 
-function canMoveRight(you: Battlesnake, occupiedFields: Coord[], board: Board) {
+function canMoveRight(you, occupiedFields, board) {
   const head = you.body[0];
   const coord = { ...head };
   coord.x++;
   return isCoordSafe(coord, occupiedFields, board);
 }
 
-function canMoveDown(you: Battlesnake, occupiedFields: Coord[], board: Board) {
+function canMoveDown(you, occupiedFields, board) {
   const head = you.body[0];
   const coord = { ...head };
   coord.y--;
   return isCoordSafe(coord, occupiedFields, board);
 }
 
-function canMoveLeft(you: Battlesnake, occupiedFields: Coord[], board: Board) {
+function canMoveLeft(you, occupiedFields, board) {
   const head = you.body[0];
   const coord = { ...head };
   coord.x--;
   return isCoordSafe(coord, occupiedFields, board);
 }
 
-function isCoordSafe(coord: Coord, occupiedFields: Coord[], board: Board) {
+function isCoordSafe(coord, occupiedFields, board) {
   // coord is out of bounds
   if (isOutOfBounds(coord, board)) return false;
 
@@ -46,7 +44,7 @@ function isCoordSafe(coord: Coord, occupiedFields: Coord[], board: Board) {
   return true;
 }
 
-function isOutOfBounds(coord: Coord, board: Board) {
+function isOutOfBounds(coord, board) {
   return coord.x < 0 || coord.y < 0 || coord.x >= board.width || coord.y >= board.height;
 }
 

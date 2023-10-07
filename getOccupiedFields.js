@@ -1,6 +1,4 @@
-import { GameState, Coord } from './types';
-
-export function getOccupiedFields(state: GameState) {
+export function getOccupiedFields(state) {
   const fields = state.board.snakes
     .map(s => s.body.slice(0, -1)) // Remove the tail from each snake. It will be gone next turn.
     .flatMap(c => c);
@@ -10,7 +8,7 @@ export function getOccupiedFields(state: GameState) {
   const potentialLargeSnakeHeadCoords = largeSnakes.flatMap(s => {
     const head = s.body[0];
     const neck = s.body[1];
-    const potentialCoords: Coord[] = [];
+    const potentialCoords = [];
     if (head.y >= neck.y) potentialCoords.push({ x: head.x, y: head.y + 1 });
     if (head.y <= neck.y) potentialCoords.push({ x: head.x, y: head.y - 1 });
     if (head.x >= neck.x) potentialCoords.push({ x: head.x + 1, y: head.y });
