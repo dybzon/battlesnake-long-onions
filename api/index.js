@@ -1,6 +1,6 @@
-import runServer from './server.js';
-import { getOccupiedFields } from './getOccupiedFields.js'
-import { getSafeMoves } from './getSafeMoves.js'
+import runServer from '../server.js';
+import { getOccupiedFields } from '../getOccupiedFields.js'
+import { getSafeMoves } from '../getSafeMoves.js'
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
