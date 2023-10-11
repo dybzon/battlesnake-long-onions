@@ -1,6 +1,41 @@
-import runServer from '../server.js';
 import { getOccupiedFields } from '../getOccupiedFields.js'
 import { getSafeMoves } from '../getSafeMoves.js'
+import express from "express"
+
+const app = express();
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send(info());
+});
+
+app.post("/start", (req, res) => {
+  start(req.body);
+  res.send("ok");
+});
+
+app.post("/move", (req, res) => {
+  res.send(move(req.body));
+});
+
+app.post("/end", (req, res) => {
+  end(req.body);
+  res.send("ok");
+});
+
+app.use(function(req, res, next) {
+  res.set("Server", "du har lange løg hvis du læser dette");
+  next();
+});
+
+const host = '0.0.0.0';
+const port = parseInt(process.env.PORT || '1337');
+
+app.listen(port, host, () => {
+  console.log(`Running long onions Battlesnake at http://${host}:${port}...`);
+});
+
+
 
 // info is called when you create your Battlesnake on play.battlesnake.com
 // and controls your Battlesnake's appearance
@@ -146,9 +181,4 @@ function measureDistance(a, b) {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 }
 
-runServer({
-  info: info,
-  start: start,
-  move: move,
-  end: end
-});
+export default app;
